@@ -1,0 +1,47 @@
+---
+title: "PlantGrowth-Data"
+author: "R Chellaton"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+eval=FALSE
+```
+Including Libraries
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+## Summary of the dataset - PlantGrowth
+
+```{r PlantGrowth}
+summary(tibble(PlantGrowth))
+plantgrowth_t <- tibble(PlantGrowth)
+```
+
+#### Running plot directly on the dataset: 
+```{r boxplot-by-group, echo=FALSE}
+plot(weight~group, tibble(PlantGrowth), 
+     ylab = 'Dried weight of plant', 
+     xlab = 'group', col=c('tomato1','burlywood1','steelblue2'))
+```
+
+#### Using ggplot - visualization
+```{r ggplot-visuals, echo=FALSE}
+mwt <- mean(plantgrowth_t$weight)
+baseplot <- ggplot(data=plantgrowth_t, 
+                   aes(x=group, y=weight, col=group)) +
+  labs(title='Plant Growth dataset',
+       x = 'Group', y = 'Dry Weight') + 
+  theme(plot.title = element_text(color = 'firebrick4', size=14, hjust=.5)) +
+  geom_hline( aes(yintercept=mean(weight))) + 
+  annotate("text", x = 'trt1', y = mwt+0.08, color='seagreen', label="Mean weight")
+  
+plot1 <- baseplot + geom_boxplot()
+print(plot1)
+
+plot2 <- baseplot + geom_point()
+print(plot2)
+```
